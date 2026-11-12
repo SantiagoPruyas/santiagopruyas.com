@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+/* Tokens del sitio. El único acento es --luz: cada escena lo redefine en su
+   contenedor con data-luz y todo lo que tiene adentro cambia con él. */
+:root {
+  --barra: #050404;
+  --fondo: #0c0b0a;
+  --superficie: #191715;
+  --texto: #ece6dc;
+  --apoyo: #a69d90;
+  --linea: #2c2823;
+  --luz: #f2661f;
+  --sobre-luz: #140a04;
+
+  --franja: 56px;
+  --margen: 16px;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --franja: 84px;
+    --margen: 56px;
+  }
+}
+
+/* Naranja: escenas propias. Verde: Municipalidad. Dorado: Fondare. Violeta: 4peeq. */
+[data-luz="naranja"] { --luz: #f2661f; }
+[data-luz="verde"] { --luz: #41b45e; }
+[data-luz="dorado"] { --luz: #eac081; }
+[data-luz="violeta"] { --luz: #a996f2; }
+
+@theme {
+  --color-*: initial;
+}
+
+@theme inline {
+  --color-barra: var(--barra);
+  --color-fondo: var(--fondo);
+  --color-superficie: var(--superficie);
+  --color-texto: var(--texto);
+  --color-apoyo: var(--apoyo);
+  --color-linea: var(--linea);
+  --color-luz: var(--luz);
+  --color-sobre-luz: var(--sobre-luz);
+
+  --font-sans: var(--font-sofia), ui-sans-serif, system-ui, sans-serif;
+  --font-cond: var(--font-sofia-cond), "Arial Narrow", sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+html {
+  color-scheme: dark;
+  background: var(--barra);
+  scroll-padding-top: var(--franja);
+}
+
+body {
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: var(--font-sans);
+}
+
+:focus-visible {
+  outline: 2px solid var(--luz);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--luz);
+  color: var(--sobre-luz);
+}
+
+/* Grano de película: una sola capa fija, fuera del flujo y sin eventos. */
+.grano {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  opacity: 0.08;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
