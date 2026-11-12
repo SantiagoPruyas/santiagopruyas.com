@@ -7,6 +7,7 @@ import { Enlace } from "@/components/ui/Enlace";
 import { Etiqueta } from "@/components/ui/Etiqueta";
 import { MarcoCaptura } from "@/components/ui/MarcoCaptura";
 import type { Luz } from "@/lib/escenas";
+import { idiomaDe } from "@/lib/idioma";
 
 export const metadata: Metadata = {
   title: "Sistema visual",
@@ -20,10 +21,13 @@ const LUCES: { luz: Luz; lugar: string; uso: string; valor: string }[] = [
   { luz: "violeta", lugar: "4peeq", uso: "Pymetón, PeeqSales y En rodaje", valor: "#A996F2" },
 ];
 
-// Página de referencia para desarrollo: muestra los tokens y las piezas base. No se indexa.
-export default function Sistema() {
+// Página de referencia para desarrollo: muestra los tokens y las piezas base. No se indexa
+// ni se traduce: sus textos describen el sistema, no son contenido del sitio.
+export default async function Sistema({ params }: PageProps<"/[lang]/sistema">) {
+  const idioma = await idiomaDe(params);
+
   return (
-    <Marco codigo="00:00:00:00">
+    <Marco idioma={idioma}>
       <div className="mx-auto flex max-w-[1400px] flex-col gap-20 px-[var(--margen)] py-12 md:gap-28 md:py-20">
         <header className="flex flex-col gap-4">
           <Etiqueta>Referencia interna</Etiqueta>

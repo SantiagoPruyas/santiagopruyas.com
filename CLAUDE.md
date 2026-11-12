@@ -15,13 +15,15 @@
 ## Stack y comandos
 
 - Next.js 16 (App Router, `cacheComponents`), React 19, TypeScript, Tailwind v4. Hosting previsto: Vercel.
-- Idioma: español, con inglés en `/en` cuando llegue el contenido bilingüe.
+- Idiomas: español en la raíz e inglés en `/en`. Por dentro las dos son `src/app/[lang]`: `next.config.ts` reescribe la raíz a `/es` y redirige `/es` a la raíz.
+- Contenido: todos los textos visibles viven en `src/contenido/` (`es.ts` y `en.ts`, con el mismo tipo). Los datos que no dependen del idioma, en `src/lib/` (`escenas.ts`, `productos.ts`). Ningún componente lleva texto escrito adentro, salvo `/sistema`.
+- Un dato que falta se declara como `{ falta: "..." }` y se muestra entre corchetes con `textoDeDato`.
 
 ```bash
 npm run dev          # local en http://localhost:3000
 npm run build        # build de producción
 npm run lint         # lint
-npm run typecheck    # tipos
+npm run typecheck    # genera los tipos de las rutas y revisa tipos
 ```
 
 ## Marca y dirección visual
@@ -56,8 +58,9 @@ npm run typecheck    # tipos
 |---|---|---|
 | `/` | La película: nueve escenas | Solo el marco |
 | `/sistema` | Referencia interna de tokens y piezas base; no se indexa | Hecha |
+| `/guion` | Referencia interna: todos los textos, escena por escena, en el idioma de la ruta; no se indexa | Hecha |
 | `/trabajo/[producto]` | Página de caso de cada producto destacado | Pendiente |
-| `/en/...` | Versión en inglés | Pendiente |
+| `/en/...` | Versión en inglés de cada página | Hecha para las páginas que existen |
 
 ## Verificación de este sitio
 
