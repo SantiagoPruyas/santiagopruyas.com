@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
 import { IDIOMAS, rutaEn, type Contenido, type Idioma } from "@/contenido";
-import { NAVEGACION, type IdNavegacion } from "@/lib/escenas";
+import { GRUPO_DE, NAVEGACION } from "@/lib/escenas";
+import { usePelicula } from "./pelicula";
 
 const PISTA = "font-mono text-[12px] uppercase tracking-[0.06em] text-apoyo";
 
@@ -62,11 +63,12 @@ function Subtitulos({ idioma, textos, corto = false }: SubtitulosProps) {
 type Props = {
   idioma: Idioma;
   textos: Textos;
-  // Entrada de la navegación que corresponde a la escena en pantalla.
-  activa?: IdNavegacion;
 };
 
-export function FranjaSuperior({ idioma, textos, activa = "apertura" }: Props) {
+export function FranjaSuperior({ idioma, textos }: Props) {
+  const { actual, irA } = usePelicula();
+  // Entrada de la navegación que corresponde a la escena en pantalla.
+  const activa = GRUPO_DE[actual];
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [sonido, setSonido] = useState(false);
   const [comentario, setComentario] = useState(false);
@@ -113,6 +115,10 @@ export function FranjaSuperior({ idioma, textos, activa = "apertura" }: Props) {
             <Link
               key={enlace.id}
               href={enlace.href}
+              onClick={(evento) => {
+                // Si la escena está en esta página, el scroll va hasta ella sin navegar.
+                if (irA(enlace.id)) evento.preventDefault();
+              }}
               aria-current={enlace.id === activa ? "true" : undefined}
               className="text-apoyo transition-colors duration-200 hover:text-texto aria-[current]:text-texto"
             >
@@ -150,7 +156,10 @@ export function FranjaSuperior({ idioma, textos, activa = "apertura" }: Props) {
             <Link
               key={enlace.id}
               href={enlace.href}
-              onClick={() => setMenuAbierto(false)}
+              onClick={(evento) => {
+                setMenuAbierto(false);
+                if (irA(enlace.id)) evento.preventDefault();
+              }}
               className="flex min-h-12 items-center border-b border-linea font-cond text-[28px] font-bold uppercase tracking-[0.02em]"
             >
               {enlace.nombre}

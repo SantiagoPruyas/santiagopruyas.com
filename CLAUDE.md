@@ -14,7 +14,7 @@
 
 ## Stack y comandos
 
-- Next.js 16 (App Router, `cacheComponents`), React 19, TypeScript, Tailwind v4. Hosting previsto: Vercel.
+- Next.js 16 (App Router, `cacheComponents`), React 19, TypeScript, Tailwind v4, GSAP con ScrollTrigger y Lenis. Hosting previsto: Vercel.
 - Idiomas: español en la raíz e inglés en `/en`. Por dentro las dos son `src/app/[lang]`: `next.config.ts` reescribe la raíz a `/es` y redirige `/es` a la raíz.
 - Contenido: todos los textos visibles viven en `src/contenido/` (`es.ts` y `en.ts`, con el mismo tipo). Los datos que no dependen del idioma, en `src/lib/` (`escenas.ts`, `productos.ts`). Ningún componente lleva texto escrito adentro, salvo `/sistema`.
 - Un dato que falta se declara como `{ falta: "..." }` y se muestra entre corchetes con `textoDeDato`.
@@ -25,6 +25,17 @@ npm run build        # build de producción
 npm run lint         # lint
 npm run typecheck    # genera los tipos de las rutas y revisa tipos
 ```
+
+## Motor de escenas
+
+- `src/components/marco/MarcoVivo.tsx` es la parte viva del marco: scroll suave con Lenis, qué escena está en pantalla, la luz de las franjas, el avance de la línea de tiempo y el código de tiempo. El avance y el código se escriben directo en el DOM (`--avance`, `[data-codigo]`); React solo se entera cuando cambia la escena.
+- `Escena` es un tramo alto con un cuadro `position: sticky` adentro. No se usa el `pin` de ScrollTrigger. La duración de cada escena, en pantallas, está en `src/lib/escenas.ts`.
+- Cada escena arma su animación con `useGSAP` y un ScrollTrigger con `scrub` sobre su tramo (`closest("[data-escena]")`), con `start` y `end` calculados con `altoDeFranja()`. Ver `src/components/escenas/Apertura.tsx`.
+- Con `prefers-reduced-motion` no hay Lenis ni animaciones de scroll, los tramos se achican al alto del contenido y no se bajan los cuadros del personaje.
+- `usePelicula()` da la escena actual e `irA(id)`, que lleva el scroll a una escena.
+- `overflow-anchor: none` en `html` y `body` es necesario: con `cacheComponents` la página anterior sigue en el DOM mientras entra la nueva y el anclaje de scroll del navegador movía la posición al cambiar de idioma.
+- `Secuencia` dibuja cuadros en un canvas; la imagen fija es el último cuadro y los demás se bajan después de la carga. Los cuadros se convierten con `node scripts/cuadros.mjs`.
+- Las escenas 02 a 09 usan `EscenaBreve` hasta tener su versión definitiva.
 
 ## Marca y dirección visual
 
@@ -56,7 +67,7 @@ npm run typecheck    # genera los tipos de las rutas y revisa tipos
 
 | Ruta | Propósito | Estado |
 |---|---|---|
-| `/` | La película: nueve escenas | Solo el marco |
+| `/` | La película: nueve escenas | Motor y apertura hechos; las otras ocho, en versión breve |
 | `/sistema` | Referencia interna de tokens y piezas base; no se indexa | Hecha |
 | `/guion` | Referencia interna: todos los textos, escena por escena, en el idioma de la ruta; no se indexa | Hecha |
 | `/trabajo/[producto]` | Página de caso de cada producto destacado | Pendiente |

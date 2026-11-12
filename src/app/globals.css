@@ -23,6 +23,18 @@
   }
 }
 
+/* Registrar --luz como color permite animarla: las franjas cambian de luz
+   con una transición cuando la película pasa de una escena a otra. */
+@property --luz {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f2661f;
+}
+
+[data-marco] {
+  transition: --luz 700ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 /* Naranja: escenas propias. Verde: Municipalidad. Dorado: Fondare. Violeta: 4peeq. */
 [data-luz="naranja"] { --luz: #f2661f; }
 [data-luz="verde"] { --luz: #41b45e; }
@@ -54,6 +66,13 @@ html {
   scroll-padding-top: var(--franja);
 }
 
+/* Sin anclaje de scroll. Al cambiar de idioma la página nueva entra mientras
+   la anterior todavía está, y el navegador corría el scroll para compensar. */
+html,
+body {
+  overflow-anchor: none;
+}
+
 body {
   background: var(--fondo);
   color: var(--texto);
@@ -78,6 +97,28 @@ body {
   pointer-events: none;
   opacity: 0.08;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Entrada de la apertura. Corre desde el primer pintado, sin esperar al
+   JavaScript, y arranca con todo visible para no demorar el contenido. */
+@keyframes entra-titulo {
+  from {
+    transform: translateY(28px);
+  }
+}
+
+@keyframes entra-luz {
+  from {
+    filter: brightness(0.4);
+  }
+}
+
+.entra-titulo {
+  animation: entra-titulo 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.entra-luz {
+  animation: entra-luz 1400ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 @media (prefers-reduced-motion: reduce) {

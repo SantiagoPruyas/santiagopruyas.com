@@ -1,20 +1,22 @@
+"use client";
+
 import { Etiqueta } from "@/components/ui/Etiqueta";
 import type { Contenido } from "@/contenido";
-import { ESCENAS, type Escena } from "@/lib/escenas";
+import { ESCENAS } from "@/lib/escenas";
+import { usePelicula } from "./pelicula";
 import { TiraDeTiempo } from "./TiraDeTiempo";
 
 type Props = {
-  escena: Escena;
-  nombre: string;
   textos: Contenido["interfaz"];
-  progreso: number;
-  // Código de tiempo con cuadros: hh:mm:ss:cc.
-  codigo: string;
+  nombres: Contenido["escenas"];
+  marcas: number[];
 };
 
-const MARCAS = ESCENAS.map((_, indice) => indice / ESCENAS.length);
+export function FranjaInferior({ textos, nombres, marcas }: Props) {
+  const { actual, irA } = usePelicula();
+  const indice = Math.max(0, ESCENAS.findIndex((escena) => escena.id === actual));
+  const escena = ESCENAS[indice];
 
-export function FranjaInferior({ escena, nombre, textos, progreso, codigo }: Props) {
   return (
     <div
       role="region"
@@ -23,13 +25,21 @@ export function FranjaInferior({ escena, nombre, textos, progreso, codigo }: Pro
     >
       <Etiqueta className="whitespace-nowrap">
         {textos.escenaAbreviada} {escena.numero}
-        <span className="hidden md:inline"> — {nombre}</span>
+        <span className="hidden md:inline"> — {nombres[escena.id]}</span>
       </Etiqueta>
-      <TiraDeTiempo marcas={MARCAS} progreso={progreso} className="min-w-0 flex-1" />
-      <Etiqueta className="whitespace-nowrap">
-        {/* En el celular no hay lugar para los cuadros. */}
-        <span className="md:hidden">{codigo.slice(0, 8)}</span>
-        <span className="hidden md:inline">{codigo}</span>
+      <TiraDeTiempo
+        marcas={marcas}
+        etiquetas={ESCENAS.map((e) => `${textos.escenaAbreviada} ${e.numero} — ${nombres[e.id]}`)}
+        actual={indice}
+        alElegir={(elegida) => irA(ESCENAS[elegida].id)}
+        className="min-w-0 flex-1"
+      />
+      {/* El marco escribe acá el código de tiempo mientras se hace scroll. En el celular no hay lugar para los cuadros. */}
+      <Etiqueta className="whitespace-nowrap tabular-nums">
+        <span data-codigo>00:00:00</span>
+        <span data-cuadros className="hidden md:inline">
+          :00
+        </span>
       </Etiqueta>
     </div>
   );
