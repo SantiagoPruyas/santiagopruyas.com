@@ -29,6 +29,7 @@ export const es: Contenido = {
     abrir: "Abrir",
     faltaCaptura: "Falta capturar esta pantalla",
     paginaPublica: "Página pública",
+    cierre: "Cierre",
   },
   escenas: {
     apertura: "Apertura",
@@ -138,6 +139,7 @@ export const es: Contenido = {
   },
   enRodaje: {
     subtitulo: ["Tres productos que todavía se están filmando."],
+    estado: "En desarrollo",
     tarjetas: [
       { nombre: "Peeq Up", texto: { falta: "una línea sobre Peeq Up" } },
       { nombre: "El Bagual", texto: { valor: "De la comanda en la tablet a la factura." } },
@@ -185,7 +187,6 @@ export const es: Contenido = {
     bajada: "Todos los textos del sitio, escena por escena, en el idioma elegido.",
     recorrido: "Recorrido",
     dato: "Dato",
-    cierre: "Cierre",
     sinSitio: "Sistema privado, sin sitio público",
   },
 };

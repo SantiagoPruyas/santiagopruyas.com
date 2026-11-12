@@ -49,7 +49,7 @@ function detalle(id: IdEscena, c: Contenido, idioma: "es" | "en"): ReactNode {
         <Fila nombre={c.guion.recorrido}>
           <Pasos pasos={texto.pasos} />
         </Fila>
-        {texto.cierre ? <Fila nombre={c.guion.cierre}>{texto.cierre}</Fila> : null}
+        {texto.cierre ? <Fila nombre={c.interfaz.cierre}>{texto.cierre}</Fila> : null}
         <Fila nombre={c.comentario.titulo}>
           {texto.comentario}{" "}
           <span className="text-apoyo">

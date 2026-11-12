@@ -21,8 +21,9 @@ const SUAVE = "ease-[cubic-bezier(0.32,0.72,0,1)]";
 const dosCifras = (valor: number) => String(valor).padStart(2, "0");
 const sitioDe = (url: string) => new URL(url).host;
 
-// Cada parada del recorrido: un paso del producto o, al final de MuniOficios,
-// la mención del Portal de Gobierno Abierto.
+// Cada parada del recorrido: un paso del producto y, al final, lo que la
+// escena tenga para cerrar: en MuniOficios la mención del Portal de Gobierno
+// Abierto, en Pymetón su credencial 3D.
 type Toma = {
   titulo: string;
   texto: string;
@@ -152,6 +153,8 @@ export function EscenaProducto({ producto, etiqueta, textos, tamano, interfaz, r
   // angostas, donde la descripción y los pasos comparten el mismo lugar.
   const [toma, setToma] = useState(-1);
   const [hojaAbierta, setHojaAbierta] = useState(false);
+  // Si la escena está a la vista: fuera de ella los videos no corren.
+  const [enPantalla, setEnPantalla] = useState(false);
 
   const direccion = producto.enVivo ? sitioDe(producto.enVivo) : undefined;
   const tomas: Toma[] = textos.pasos.map((paso, indice) => {
@@ -181,6 +184,17 @@ export function EscenaProducto({ producto, etiqueta, textos, tamano, interfaz, r
       enVivo: GOBIERNO_ABIERTO.enVivo,
     });
   }
+  if (producto.cierre && textos.cierre) {
+    tomas.push({
+      titulo: textos.cierre,
+      texto: "",
+      captura: producto.cierre,
+      alt: `${producto.nombre}: ${textos.cierre}`,
+      falta: false,
+      direccion,
+      etiqueta: interfaz.cierre,
+    });
+  }
   const cantidad = tomas.length;
   const actual = Math.max(0, toma);
 
@@ -208,6 +222,13 @@ export function EscenaProducto({ producto, etiqueta, textos, tamano, interfaz, r
           setToma(Math.min(paradas - 1, Math.floor(self.progress * paradas)) - presentacion);
           escena.style.setProperty("--recorrido", self.progress.toFixed(3));
         },
+      });
+
+      ScrollTrigger.create({
+        trigger: tramo,
+        start: "top bottom",
+        end: "bottom top",
+        onToggle: (self) => setEnPantalla(self.isActive),
       });
 
       // Mientras la escena sube a su lugar, la pantalla llega un poco después que el texto.
@@ -301,7 +322,9 @@ export function EscenaProducto({ producto, etiqueta, textos, tamano, interfaz, r
                 <div>
                   {parada.etiqueta ? <Etiqueta>{parada.etiqueta}</Etiqueta> : null}
                   <h3 className="text-[19px] font-medium leading-snug">{tituloDe(parada)}</h3>
-                  <p className="text-[15px] leading-[1.4] text-apoyo">{parada.texto}</p>
+                  {parada.texto ? (
+                    <p className="text-[15px] leading-[1.4] text-apoyo">{parada.texto}</p>
+                  ) : null}
                   {detalleDe(parada)}
                 </div>
               </div>
@@ -368,6 +391,7 @@ export function EscenaProducto({ producto, etiqueta, textos, tamano, interfaz, r
                 falta={interfaz.faltaCaptura}
                 nota={parada.nota}
                 modo="ajustada"
+                activa={enPantalla && indice === actual}
               />
             </div>
           ))}
@@ -416,7 +440,9 @@ export function EscenaProducto({ producto, etiqueta, textos, tamano, interfaz, r
                   <h3 className="text-[17px] font-medium leading-snug text-apoyo transition-colors duration-300 group-data-[activo=true]:text-texto lg:text-[19px]">
                     {tituloDe(parada)}
                   </h3>
-                  <p className="text-[15px] leading-[1.4] text-apoyo">{parada.texto}</p>
+                  {parada.texto ? (
+                    <p className="text-[15px] leading-[1.4] text-apoyo">{parada.texto}</p>
+                  ) : null}
                   {detalleDe(parada)}
                 </div>
               </li>

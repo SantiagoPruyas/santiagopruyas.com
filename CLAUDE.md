@@ -39,7 +39,9 @@ npm run typecheck    # genera los tipos de las rutas y revisa tipos
 - Las capturas de cada paso están en `src/lib/productos.ts` (`recorrido`, una por paso; `null` si falta) y se preparan con `node scripts/capturas.mjs <carpeta-de-originales>`, que solo recorta y achica. Un paso sin captura muestra la `portada` del producto si la tiene, y si no un marcador; en los dos casos el paso lleva el marcador entre corchetes.
 - `Pantalla` pone la captura en su marco. En una escena el marco entra entero en su lugar con unidades de contenedor (`.pantalla-navegador` y `.pantalla-telefono` en `globals.css`).
 - Comentario del director: `useComentario()` (`src/components/marco/comentario.ts`) guarda el interruptor en `localStorage`, así sigue igual al cambiar de escena y de idioma. Desde 1280 de ancho es una columna a la derecha de la pantalla, que se achica con `scale` para hacerle lugar; por debajo es una barra que abre una hoja. Nada cambia de tamaño en el flujo: solo `scale`, `translate` y `opacity`.
-- Las escenas 06 a 09 usan `EscenaBreve` hasta tener su versión definitiva.
+- Una captura puede traer un `video` (`Pantalla` lo reproduce solo mientras es la parada actual y la escena está a la vista; la imagen es su cuadro quieto y lo que se ve con movimiento reducido). El `cierre` de un producto es su última parada: hoy solo Pymetón, con la credencial 3D grabada de eventos.4peeq.com.
+- La escena 06 usa `EnRodaje`: tres cuadros sin capturas que pasan de costado con el scroll.
+- Las escenas 07 a 09 usan `EscenaBreve` hasta tener su versión definitiva.
 
 ## Marca y dirección visual
 
@@ -71,7 +73,7 @@ npm run typecheck    # genera los tipos de las rutas y revisa tipos
 
 | Ruta | Propósito | Estado |
 |---|---|---|
-| `/` | La película: nueve escenas | Motor, apertura y las cuatro escenas de producto hechos; de la 06 a la 09, en versión breve |
+| `/` | La película: nueve escenas | Motor, apertura y escenas 02 a 06 hechos; de la 07 a la 09, en versión breve |
 | `/sistema` | Referencia interna de tokens y piezas base; no se indexa | Hecha |
 | `/guion` | Referencia interna: todos los textos, escena por escena, en el idioma de la ruta; no se indexa | Hecha |
 | `/trabajo/[producto]` | Página de caso de cada producto destacado | Pendiente |

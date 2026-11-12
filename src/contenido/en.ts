@@ -29,6 +29,7 @@ export const en: Contenido = {
     abrir: "Open",
     faltaCaptura: "This screen hasn't been captured yet",
     paginaPublica: "Public page",
+    cierre: "Closing shot",
   },
   escenas: {
     apertura: "Opening",
@@ -138,6 +139,7 @@ export const en: Contenido = {
   },
   enRodaje: {
     subtitulo: ["Three products still being filmed."],
+    estado: "In development",
     tarjetas: [
       { nombre: "Peeq Up", texto: { falta: "one line about Peeq Up" } },
       { nombre: "El Bagual", texto: { valor: "From the order on a tablet to the invoice." } },
@@ -185,7 +187,6 @@ export const en: Contenido = {
     bajada: "Every line on the site, scene by scene, in the chosen language.",
     recorrido: "Walkthrough",
     dato: "Figure",
-    cierre: "Closing shot",
     sinSitio: "Private system, no public site",
   },
 };

@@ -1,5 +1,7 @@
+"use client";
+
 import Image from "next/image";
-import type { CSSProperties } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 import { MarcoCaptura } from "@/components/ui/MarcoCaptura";
 import type { Captura } from "@/lib/productos";
 
@@ -21,11 +23,49 @@ type Props = {
   // Ajustada: entra entera en el lugar que le toca, que tiene que ser un
   // contenedor con tamaño. Fluida: ocupa el ancho disponible, en el flujo.
   modo: "ajustada" | "fluida";
+  // Si es la pantalla que se está viendo. Un video solo corre mientras lo es.
+  activa?: boolean;
 };
 
+type VideoProps = { captura: Captura; alt: string; activa: boolean };
+
+// Una pantalla que se mueve. Arranca cuando le toca y vuelve al principio
+// cuando deja de verse; hasta entonces muestra su cuadro quieto y no baja nada.
+function Video({ captura, alt, activa }: VideoProps) {
+  const video = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const elemento = video.current;
+    if (!elemento) return;
+    if (activa) {
+      // El navegador puede negarse a reproducir: queda el cuadro quieto.
+      elemento.play().catch(() => {});
+    } else {
+      elemento.pause();
+      elemento.currentTime = 0;
+    }
+  }, [activa]);
+
+  return (
+    <video
+      ref={video}
+      src={captura.video}
+      poster={captura.src}
+      aria-label={alt}
+      muted
+      loop
+      playsInline
+      preload="none"
+      className="absolute inset-0 size-full object-cover"
+      style={{ objectPosition: captura.foco }}
+    />
+  );
+}
+
 // Una pantalla del recorrido dentro de su marco de dispositivo. Si la captura
-// falta va un marcador a la vista: nunca se inventa una pantalla.
-export function Pantalla({ captura, alt, direccion, falta, nota, modo }: Props) {
+// falta va un marcador a la vista: nunca se inventa una pantalla. Los videos
+// solo corren en la escena animada; en la versión quieta va su cuadro fijo.
+export function Pantalla({ captura, alt, direccion, falta, nota, modo, activa = false }: Props) {
   const ajustada = modo === "ajustada";
 
   if (captura?.marco === "telefono") {
@@ -50,7 +90,9 @@ export function Pantalla({ captura, alt, direccion, falta, nota, modo }: Props) 
     >
       <MarcoCaptura direccion={direccion} className={SOMBRA}>
         <div className={`vista relative ${ajustada ? "" : "aspect-[var(--r)]"}`}>
-          {captura ? (
+          {captura?.video && ajustada ? (
+            <Video captura={captura} alt={alt} activa={activa} />
+          ) : captura ? (
             <Image
               src={captura.src}
               alt={alt}

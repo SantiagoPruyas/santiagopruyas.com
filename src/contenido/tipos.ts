@@ -44,6 +44,8 @@ export type Contenido = {
     // Marcador de un paso del recorrido que todavía no tiene captura.
     faltaCaptura: string;
     paginaPublica: string;
+    // Rótulo de la última parada de una escena, cuando tiene una pieza para lucir.
+    cierre: string;
   };
   escenas: Record<IdEscena, string>;
   apertura: {
@@ -67,7 +69,7 @@ export type Contenido = {
   };
   // Gobierno Abierto no tiene escena: va como mención dentro de MuniOficios.
   mencion: { etiqueta: string; credito: string; texto: string; dato: string };
-  enRodaje: { subtitulo: string[]; tarjetas: { nombre: string; texto: Dato }[] };
+  enRodaje: { subtitulo: string[]; estado: string; tarjetas: { nombre: string; texto: Dato }[] };
   metodo: { subtitulo: string[]; momentos: Paso[] };
   detras: {
     subtitulo: string[];
@@ -88,7 +90,6 @@ export type Contenido = {
     bajada: string;
     recorrido: string;
     dato: string;
-    cierre: string;
     sinSitio: string;
   };
 };

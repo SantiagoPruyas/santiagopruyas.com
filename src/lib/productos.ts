@@ -9,6 +9,8 @@ export type Captura = {
   marco: "navegador" | "telefono";
   // Qué parte queda a la vista cuando el marco la recorta en una pantalla angosta.
   foco?: string;
+  // Si la pantalla se mueve: el video, del que la imagen es el cuadro quieto.
+  video?: string;
 };
 
 const captura = (
@@ -23,7 +25,8 @@ const captura = (
 // package.json de cada repositorio; las pantallas y la fecha, de su historial.
 // El recorrido tiene una captura por paso, en el orden de los pasos del
 // contenido; null es un paso que todavía no se capturó. La portada es lo que
-// se muestra mientras tanto, si hay algo real para mostrar.
+// se muestra mientras tanto, si hay algo real para mostrar. El cierre es la
+// última parada de la escena, para una pieza que merece su momento.
 export const PRODUCTOS = [
   {
     id: "munioficios",
@@ -39,6 +42,7 @@ export const PRODUCTOS = [
       captura("munioficios-credencial", 1600, 830),
     ],
     portada: null,
+    cierre: null,
   },
   {
     id: "fondare",
@@ -51,6 +55,7 @@ export const PRODUCTOS = [
     // La aplicación todavía no se capturó: va la página pública.
     recorrido: [null, null, null],
     portada: captura("fondare-publica", 1600, 1000, "navegador", "78% 50%"),
+    cierre: null,
   },
   {
     id: "pymeton",
@@ -62,6 +67,11 @@ export const PRODUCTOS = [
     enVivo: "https://eventos.4peeq.com",
     recorrido: [captura("pymeton-evento", 1600, 1000), null, null],
     portada: null,
+    // La credencial 3D que cuelga en el inicio, grabada del sitio en vivo.
+    cierre: {
+      ...captura("pymeton-credencial", 1280, 660, "navegador", "72% 50%"),
+      video: "/capturas/pymeton-credencial.mp4",
+    },
   },
   {
     id: "peeqsales",
@@ -78,6 +88,7 @@ export const PRODUCTOS = [
       captura("peeqsales-repartidor", 390, 768, "telefono"),
     ],
     portada: null,
+    cierre: null,
   },
 ] as const satisfies readonly {
   id: string;
@@ -89,6 +100,7 @@ export const PRODUCTOS = [
   enVivo: string | null;
   recorrido: readonly (Captura | null)[];
   portada: Captura | null;
+  cierre: Captura | null;
 }[];
 
 export type Producto = (typeof PRODUCTOS)[number];

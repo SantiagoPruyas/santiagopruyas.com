@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Apertura } from "@/components/escenas/Apertura";
+import { EnRodaje } from "@/components/escenas/EnRodaje";
 import { EscenaBreve } from "@/components/escenas/EscenaBreve";
 import { EscenaProducto } from "@/components/escenas/EscenaProducto";
 import { Escena } from "@/components/marco/Escena";
@@ -16,7 +17,6 @@ export async function generateMetadata({ params }: PageProps<"/[lang]">): Promis
 // Lo que muestra cada escena que todavía no tiene su versión definitiva.
 function breve(id: IdEscena, c: Contenido) {
   const subtitulos: Partial<Record<IdEscena, string[]>> = {
-    "en-rodaje": c.enRodaje.subtitulo,
     metodo: c.metodo.subtitulo,
     "detras-de-escena": c.detras.subtitulo,
     creditos: c.creditos.subtitulo,
@@ -58,6 +58,8 @@ export default async function Inicio({ params }: PageProps<"/[lang]">) {
                 rotulos={c.comentario}
                 mencion={producto.id === "munioficios" ? c.mencion : undefined}
               />
+            ) : escena.id === "en-rodaje" ? (
+              <EnRodaje etiqueta={numero} titulo={c.escenas[escena.id]} textos={c.enRodaje} />
             ) : (
               <EscenaBreve etiqueta={numero} {...breve(escena.id, c)} />
             )}
