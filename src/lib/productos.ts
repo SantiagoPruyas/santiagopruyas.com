@@ -1,7 +1,29 @@
 import type { Luz } from "./escenas";
 
+// Una pantalla real de un producto, dentro de su marco. Los archivos se
+// preparan con scripts/capturas.mjs.
+export type Captura = {
+  src: string;
+  ancho: number;
+  alto: number;
+  marco: "navegador" | "telefono";
+  // Qué parte queda a la vista cuando el marco la recorta en una pantalla angosta.
+  foco?: string;
+};
+
+const captura = (
+  nombre: string,
+  ancho: number,
+  alto: number,
+  marco: Captura["marco"] = "navegador",
+  foco?: string,
+): Captura => ({ src: `/capturas/${nombre}.jpg`, ancho, alto, marco, foco });
+
 // Datos de cada producto que no dependen del idioma. El stack sale del
 // package.json de cada repositorio; las pantallas y la fecha, de su historial.
+// El recorrido tiene una captura por paso, en el orden de los pasos del
+// contenido; null es un paso que todavía no se capturó. La portada es lo que
+// se muestra mientras tanto, si hay algo real para mostrar.
 export const PRODUCTOS = [
   {
     id: "munioficios",
@@ -11,6 +33,12 @@ export const PRODUCTOS = [
     pantallas: 44,
     desde: "2026-03",
     enVivo: "https://lamunioficios.ciudaddecorrientes.gov.ar",
+    recorrido: [
+      captura("munioficios-oficios", 1600, 830, "navegador", "22% 50%"),
+      captura("munioficios-presupuestos", 1600, 830),
+      captura("munioficios-credencial", 1600, 830),
+    ],
+    portada: null,
   },
   {
     id: "fondare",
@@ -20,6 +48,9 @@ export const PRODUCTOS = [
     pantallas: 64,
     desde: "2026-03",
     enVivo: "https://fondare.app",
+    // La aplicación todavía no se capturó: va la página pública.
+    recorrido: [null, null, null],
+    portada: captura("fondare-publica", 1600, 1000, "navegador", "78% 50%"),
   },
   {
     id: "pymeton",
@@ -29,6 +60,8 @@ export const PRODUCTOS = [
     pantallas: 54,
     desde: "2026-07",
     enVivo: "https://eventos.4peeq.com",
+    recorrido: [captura("pymeton-evento", 1600, 1000), null, null],
+    portada: null,
   },
   {
     id: "peeqsales",
@@ -39,6 +72,12 @@ export const PRODUCTOS = [
     desde: "2026-06",
     // Es un sistema privado: no tiene sitio público.
     enVivo: null,
+    recorrido: [
+      captura("peeqsales-vendedor", 390, 546, "telefono"),
+      captura("peeqsales-administracion", 1440, 820, "navegador", "30% 50%"),
+      captura("peeqsales-repartidor", 390, 768, "telefono"),
+    ],
+    portada: null,
   },
 ] as const satisfies readonly {
   id: string;
@@ -48,6 +87,8 @@ export const PRODUCTOS = [
   pantallas: number;
   desde: string;
   enVivo: string | null;
+  recorrido: readonly (Captura | null)[];
+  portada: Captura | null;
 }[];
 
 export type Producto = (typeof PRODUCTOS)[number];
@@ -56,6 +97,7 @@ export type IdProducto = Producto["id"];
 export const GOBIERNO_ABIERTO = {
   nombre: "Portal de Gobierno Abierto",
   enVivo: "https://gobiernoabierto.ciudaddecorrientes.gov.ar",
+  captura: captura("gobierno-abierto-tableros", 1600, 1000),
 } as const;
 
 export const CONTACTO = {

@@ -99,6 +99,55 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+/* La luz del lugar de trabajo entra detrás de la pantalla de cada escena de producto. */
+.luz-de-escena {
+  background: radial-gradient(
+    ellipse 110% 56% at 50% 44%,
+    color-mix(in srgb, var(--luz) 18%, transparent),
+    color-mix(in srgb, var(--luz) 5%, transparent) 52%,
+    transparent 78%
+  );
+}
+
+/* Pantallas de una escena. El lugar que les toca es un contenedor con tamaño
+   y el marco entra entero adentro: --r es la proporción de la captura y
+   --tope lo que suma el marco. En una pantalla angosta el navegador ocupa
+   todo el ancho y puede recortar los costados de la captura hasta --recorte;
+   el teléfono queda a un ancho legible y asoma por abajo. */
+.pantalla-navegador {
+  --tope: 32px;
+  --recorte: 1.25;
+  --ancho: min(100cqw, (100cqh - var(--tope)) * var(--r));
+  width: var(--ancho);
+}
+
+.pantalla-navegador .vista {
+  height: min(100cqh - var(--tope), var(--ancho) / var(--recorte));
+}
+
+.pantalla-telefono {
+  width: min(100cqw, 230px);
+}
+
+@media (min-width: 1024px) {
+  .luz-de-escena {
+    background: radial-gradient(
+      ellipse 58% 76% at 68% 44%,
+      color-mix(in srgb, var(--luz) 18%, transparent),
+      color-mix(in srgb, var(--luz) 5%, transparent) 52%,
+      transparent 78%
+    );
+  }
+
+  .pantalla-navegador {
+    --recorte: var(--r);
+  }
+
+  .pantalla-telefono {
+    width: min(100cqw, (100cqh - 14px) * var(--r) + 14px);
+  }
+}
+
 /* Entrada de la apertura. Corre desde el primer pintado, sin esperar al
    JavaScript, y arranca con todo visible para no demorar el contenido. */
 @keyframes entra-titulo {

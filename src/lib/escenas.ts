@@ -1,13 +1,14 @@
 export type Luz = "naranja" | "verde" | "dorado" | "violeta";
 
 // Lo que no depende del idioma. Los nombres y los textos viven en src/contenido.
-// La duración se mide en pantallas: cuánto scroll ocupa la escena.
+// La duración se mide en pantallas: cuánto scroll ocupa la escena. Las de
+// producto duran según los pasos de su recorrido.
 export const ESCENAS = [
   { numero: "01", id: "apertura", luz: "naranja", duracion: 2.5 },
-  { numero: "02", id: "munioficios", luz: "verde", duracion: 1.3 },
-  { numero: "03", id: "fondare", luz: "dorado", duracion: 1.3 },
-  { numero: "04", id: "pymeton", luz: "violeta", duracion: 1.3 },
-  { numero: "05", id: "peeqsales", luz: "violeta", duracion: 1.3 },
+  { numero: "02", id: "munioficios", luz: "verde", duracion: 4.2 },
+  { numero: "03", id: "fondare", luz: "dorado", duracion: 3.4 },
+  { numero: "04", id: "pymeton", luz: "violeta", duracion: 3.4 },
+  { numero: "05", id: "peeqsales", luz: "violeta", duracion: 3.4 },
   { numero: "06", id: "en-rodaje", luz: "violeta", duracion: 1.3 },
   { numero: "07", id: "metodo", luz: "naranja", duracion: 1.3 },
   { numero: "08", id: "detras-de-escena", luz: "naranja", duracion: 1.3 },

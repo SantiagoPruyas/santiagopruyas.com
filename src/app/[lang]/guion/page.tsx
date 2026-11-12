@@ -50,14 +50,14 @@ function detalle(id: IdEscena, c: Contenido, idioma: "es" | "en"): ReactNode {
           <Pasos pasos={texto.pasos} />
         </Fila>
         {texto.cierre ? <Fila nombre={c.guion.cierre}>{texto.cierre}</Fila> : null}
-        <Fila nombre={c.guion.comentario}>
+        <Fila nombre={c.comentario.titulo}>
           {texto.comentario}{" "}
           <span className="text-apoyo">
-            {producto.pantallas} {c.guion.pantallas}, {c.guion.enConstruccionDesde}{" "}
+            {producto.pantallas} {c.comentario.pantallas}, {c.comentario.enConstruccionDesde}{" "}
             {mesYAnio(idioma, producto.desde)}. {texto.estado}.
           </span>
         </Fila>
-        <Fila nombre={c.guion.hechoCon}>{producto.stack.join(" · ")}</Fila>
+        <Fila nombre={c.comentario.hechoCon}>{producto.stack.join(" · ")}</Fila>
         <Fila nombre={c.guion.dato}>{textoDeDato(texto.dato)}</Fila>
         <Fila nombre={c.interfaz.verEnVivo}>
           {producto.enVivo ? (

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
 import { IDIOMAS, rutaEn, type Contenido, type Idioma } from "@/contenido";
 import { GRUPO_DE, NAVEGACION } from "@/lib/escenas";
+import { useComentario } from "./comentario";
 import { usePelicula } from "./pelicula";
 
 const PISTA = "font-mono text-[12px] uppercase tracking-[0.06em] text-apoyo";
@@ -71,7 +72,7 @@ export function FranjaSuperior({ idioma, textos }: Props) {
   const activa = GRUPO_DE[actual];
   const [menuAbierto, setMenuAbierto] = useState(false);
   const [sonido, setSonido] = useState(false);
-  const [comentario, setComentario] = useState(false);
+  const [comentario, alternarComentario] = useComentario();
 
   useEffect(() => {
     if (!menuAbierto) return;
@@ -95,7 +96,7 @@ export function FranjaSuperior({ idioma, textos }: Props) {
       <Interruptor
         nombre={textos.comentario}
         activo={comentario}
-        alCambiar={() => setComentario(!comentario)}
+        alCambiar={alternarComentario}
       />
     </>
   );

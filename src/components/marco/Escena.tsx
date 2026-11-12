@@ -15,6 +15,7 @@ type Props = {
 // pegado entre las dos franjas. Se usa position: sticky y no el pin de
 // ScrollTrigger para no mover nodos del DOM por fuera de React. Con
 // movimiento reducido el tramo se achica al alto del contenido y nada queda fijo.
+// El cuadro aísla sus capas para que nada de adentro pase por encima de las franjas.
 export function Escena({ id, luz, duracion = 1, children, className = "" }: Props) {
   return (
     <section
@@ -25,7 +26,7 @@ export function Escena({ id, luz, duracion = 1, children, className = "" }: Prop
       className="relative h-[calc(var(--duracion)*100lvh)] motion-reduce:h-auto"
     >
       <div
-        className={`sticky top-[var(--franja)] h-[calc(100dvh-2*var(--franja))] overflow-hidden px-[var(--margen)] motion-reduce:relative motion-reduce:top-0 motion-reduce:h-auto motion-reduce:min-h-[calc(100dvh-2*var(--franja))] ${className}`}
+        className={`sticky top-[var(--franja)] isolate h-[calc(100dvh-2*var(--franja))] overflow-hidden px-[var(--margen)] motion-reduce:relative motion-reduce:top-0 motion-reduce:h-auto motion-reduce:min-h-[calc(100dvh-2*var(--franja))] ${className}`}
       >
         {children}
       </div>

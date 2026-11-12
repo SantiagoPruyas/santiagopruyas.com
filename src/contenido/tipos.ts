@@ -39,6 +39,11 @@ export type Contenido = {
     escenaAbreviada: string;
     verEnVivo: string;
     leerElCaso: string;
+    recorrido: string;
+    abrir: string;
+    // Marcador de un paso del recorrido que todavía no tiene captura.
+    faltaCaptura: string;
+    paginaPublica: string;
   };
   escenas: Record<IdEscena, string>;
   apertura: {
@@ -50,6 +55,16 @@ export type Contenido = {
     saltar: string;
   };
   productos: Record<IdProducto, TextoProducto>;
+  // Rótulos de la capa técnica que suma el comentario del director.
+  comentario: {
+    titulo: string;
+    hechoCon: string;
+    estado: string;
+    resultado: string;
+    tamano: string;
+    pantallas: string;
+    enConstruccionDesde: string;
+  };
   // Gobierno Abierto no tiene escena: va como mención dentro de MuniOficios.
   mencion: { etiqueta: string; credito: string; texto: string; dato: string };
   enRodaje: { subtitulo: string[]; tarjetas: { nombre: string; texto: Dato }[] };
@@ -72,12 +87,8 @@ export type Contenido = {
     titulo: string;
     bajada: string;
     recorrido: string;
-    comentario: string;
     dato: string;
     cierre: string;
-    hechoCon: string;
-    pantallas: string;
-    enConstruccionDesde: string;
     sinSitio: string;
   };
 };

@@ -15,7 +15,7 @@
 ## Stack y comandos
 
 - Next.js 16 (App Router, `cacheComponents`), React 19, TypeScript, Tailwind v4, GSAP con ScrollTrigger y Lenis. Hosting previsto: Vercel.
-- Idiomas: español en la raíz e inglés en `/en`. Por dentro las dos son `src/app/[lang]`: `next.config.ts` reescribe la raíz a `/es` y redirige `/es` a la raíz.
+- Idiomas: español en la raíz e inglés en `/en`. Por dentro las dos son `src/app/[lang]`: `src/proxy.ts` sirve desde `/es` todo lo que llega sin idioma y `next.config.ts` redirige `/es` a la raíz. No volver a los `rewrites` de `next.config.ts`: en Vercel no cubrían la navegación interna hacia `/`.
 - Contenido: todos los textos visibles viven en `src/contenido/` (`es.ts` y `en.ts`, con el mismo tipo). Los datos que no dependen del idioma, en `src/lib/` (`escenas.ts`, `productos.ts`). Ningún componente lleva texto escrito adentro, salvo `/sistema`.
 - Un dato que falta se declara como `{ falta: "..." }` y se muestra entre corchetes con `textoDeDato`.
 
@@ -35,7 +35,11 @@ npm run typecheck    # genera los tipos de las rutas y revisa tipos
 - `usePelicula()` da la escena actual e `irA(id)`, que lleva el scroll a una escena.
 - `overflow-anchor: none` en `html` y `body` es necesario: con `cacheComponents` la página anterior sigue en el DOM mientras entra la nueva y el anclaje de scroll del navegador movía la posición al cambiar de idioma.
 - `Secuencia` dibuja cuadros en un canvas; la imagen fija es el último cuadro y los demás se bajan después de la carga. Los cuadros se convierten con `node scripts/cuadros.mjs`.
-- Las escenas 02 a 09 usan `EscenaBreve` hasta tener su versión definitiva.
+- Las escenas 02 a 05 usan `EscenaProducto`: el scroll avanza por las paradas del recorrido (los pasos del producto y, al final de MuniOficios, la mención de Gobierno Abierto) y con cada una cambia la pantalla. La parada actual es estado de React y el cambio lo hacen transiciones de CSS, no un `scrub`. En pantallas angostas hay una parada más al principio, la presentación, porque la descripción y los pasos comparten el mismo lugar. Con movimiento reducido se muestra otra versión, quieta, con los pasos uno debajo del otro.
+- Las capturas de cada paso están en `src/lib/productos.ts` (`recorrido`, una por paso; `null` si falta) y se preparan con `node scripts/capturas.mjs <carpeta-de-originales>`, que solo recorta y achica. Un paso sin captura muestra la `portada` del producto si la tiene, y si no un marcador; en los dos casos el paso lleva el marcador entre corchetes.
+- `Pantalla` pone la captura en su marco. En una escena el marco entra entero en su lugar con unidades de contenedor (`.pantalla-navegador` y `.pantalla-telefono` en `globals.css`).
+- Comentario del director: `useComentario()` (`src/components/marco/comentario.ts`) guarda el interruptor en `localStorage`, así sigue igual al cambiar de escena y de idioma. Desde 1280 de ancho es una columna a la derecha de la pantalla, que se achica con `scale` para hacerle lugar; por debajo es una barra que abre una hoja. Nada cambia de tamaño en el flujo: solo `scale`, `translate` y `opacity`.
+- Las escenas 06 a 09 usan `EscenaBreve` hasta tener su versión definitiva.
 
 ## Marca y dirección visual
 
@@ -67,7 +71,7 @@ npm run typecheck    # genera los tipos de las rutas y revisa tipos
 
 | Ruta | Propósito | Estado |
 |---|---|---|
-| `/` | La película: nueve escenas | Motor y apertura hechos; las otras ocho, en versión breve |
+| `/` | La película: nueve escenas | Motor, apertura y las cuatro escenas de producto hechos; de la 06 a la 09, en versión breve |
 | `/sistema` | Referencia interna de tokens y piezas base; no se indexa | Hecha |
 | `/guion` | Referencia interna: todos los textos, escena por escena, en el idioma de la ruta; no se indexa | Hecha |
 | `/trabajo/[producto]` | Página de caso de cada producto destacado | Pendiente |
